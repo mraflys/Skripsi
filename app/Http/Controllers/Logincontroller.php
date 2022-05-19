@@ -12,7 +12,7 @@ class Logincontroller extends Controller
     protected function index()
     {
        
-        return view('auth.login');
+        return redirect('/login');
     }
 
     public function authenticate(Request $request)

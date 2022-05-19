@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\User;
 
 class UserSeeder extends Seeder
 {
@@ -11,6 +12,12 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //
+        User::create([
+            'name' => 'Administrator JKI',
+            'email' => 'admin@tagana.com',
+            'password' => bcrypt('12345678'),
+            'username' => 'admin',
+            'role' =>  'administrator'
+        ]);
     }
 }
