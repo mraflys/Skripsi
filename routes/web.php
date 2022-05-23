@@ -16,5 +16,10 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
 Route::get('/', 'Logincontroller@index')->name('login.auth');
+
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/absen', 'AbsentController@index')->name('absent-index');
+    Route::get('/transactions', 'TransactionController@index')->name('transactions-index');
+    Route::get('/transactions-table', 'TransactionController@datatable')->name('transactions.datatable');
+});

@@ -14,6 +14,18 @@ class TransactionController extends Controller
 
     public function store(Request $request)
     {
+        $validator = \Validator::make($request->all(), [
+            'city' => 'required',
+            'area' => 'required',
+            'code_area' => 'required',
+            'nominal' => 'required',
+            'request_By' => 'required',
+            'file' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return \Response::json(['success' => false, 'errors' => $validator->getMessageBag()->toArray()], 200);
+        }
         //move file
         $path = public_path('storage/' . date("n"));
 
@@ -51,7 +63,8 @@ class TransactionController extends Controller
 
         return response()
             ->json([
-                'status' => 'success'
+                'success' => true,
+                'status' => 'success',
             ]);
     }
 }
