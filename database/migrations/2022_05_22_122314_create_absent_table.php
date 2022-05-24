@@ -16,10 +16,10 @@ class CreateAbsentTable extends Migration
         Schema::create('absent', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('id_user');
-            
+
             $table->timestamps();
 
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

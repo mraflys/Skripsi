@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', 'UserController@show');
-Route::POST('/transaction-store', 'API\TransactionController@store');
+Route::POST('/transaction-store', 'API\TransactionController@store')->name('transactions.store');

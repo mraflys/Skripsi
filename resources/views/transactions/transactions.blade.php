@@ -3,6 +3,12 @@
 @section('content')
     <div class="container">
         <div class="card p-3">
+            <div>
+                <a href='{{ route('transactions.new') }}' class='btn btn-outline-primary text-primary' title='Add Data'><i
+                        data-feather="plus-circle"></i>
+
+                    Add Data</a>
+            </div>
             <table id="myTable" class="table bg-light table-bordered nowrap">
                 <thead>
                     <tr>
@@ -15,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>
@@ -37,8 +43,7 @@
                 }
             });
             ajaxDataTable('{!! route('transactions.datatable') !!}',
-                [
-                    {
+                [{
                         data: 'id_transactions',
                         name: 'id_transactions'
                     },

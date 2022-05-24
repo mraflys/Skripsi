@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +11,9 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://unpkg.com/feather-icons"></script>
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/assets/css/plugins/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/assets/css/plugins/sweetalert.css">
@@ -27,6 +31,7 @@
     @yield('css')
     <!-- Styles -->
 </head>
+
 <body>
     <div id="app">
         @include('layouts.navbar')
@@ -35,6 +40,9 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+    </script>
     <script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script>
     <script src="/assets/js/vendor-all.min.js"></script>
     <script src="/assets/js/plugins/bootstrap.min.js"></script>
@@ -51,10 +59,15 @@
     <script src="/assets/js/plugins/jquery.magnific-popup.min.js"></script>
     <script src="/assets/js/plugins/select2.full.min.js"></script>
     <script src="/assets/js/plugins/lazyload/lazyload.min.js"></script>
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL"></script>
+    <script
+        src="https://cdn.polyfill.io/v2/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL">
+    </script>
     <script src="https://unpkg.com/plyr@3"></script>
 
-    
+    <script>
+        feather.replace();
+    </script>
     @yield('js')
 </body>
+
 </html>

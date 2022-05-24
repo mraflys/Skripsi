@@ -20,6 +20,7 @@ Route::get('/', 'Logincontroller@index')->name('login.auth');
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/absen', 'AbsentController@index')->name('absent-index');
-    Route::get('/transactions', 'TransactionController@index')->name('transactions-index');
+    Route::get('/transactions', 'TransactionController@index')->name('transactions.index');
+    Route::get('/transactions/new', 'TransactionController@new')->name('transactions.new');
     Route::get('/transactions-table', 'TransactionController@datatable')->name('transactions.datatable');
 });

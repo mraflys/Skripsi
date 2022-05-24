@@ -39,10 +39,10 @@ class TransactionController extends Controller
 
         $file->move($path, $name);
 
-        $fullPath = 'storage/'.date("n").'/'.$name;
+        $fullPath = 'storage/' . date("n") . '/' . $name;
 
         //get transactions count in a day
-        $trCount = Transaction::whereDate('created_at',date("Y-m-d"))->count();
+        $trCount = Transaction::whereDate('created_at', date("Y-m-d"))->count();
         $trCount = $trCount + 1;
 
         $trCount = str_pad($trCount, 4, "0", STR_PAD_LEFT);
@@ -60,6 +60,13 @@ class TransactionController extends Controller
             'file_name' => \File::name(public_path($fullPath)),
             'file_mime' => \File::mimeType(public_path($fullPath)),
         ]);
+
+
+
+        if (isset($request->web)) {
+
+            return redirect(route('transactions.index'));
+        }
 
         return response()
             ->json([

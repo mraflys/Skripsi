@@ -22,7 +22,7 @@ class CreatePhotoAbsentTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
