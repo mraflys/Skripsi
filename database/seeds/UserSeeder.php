@@ -17,7 +17,8 @@ class UserSeeder extends Seeder
             'email' => 'admin@komitras.com',
             'password' => bcrypt('12345678'),
             'username' => 'admin',
-            'role' =>  'administrator'
+            'role' =>  'administrator',
+            'is_active' =>  true
         ]);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAbsentTable extends Migration
+class CreateFaceDatasetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateAbsentTable extends Migration
      */
     public function up()
     {
-        Schema::create('absent', function (Blueprint $table) {
+        Schema::create('face_datasets', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('id_user');
             $table->text('url_path');
             $table->string('file_name');
             $table->string('file_mime');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->boolean('recognized');
-            $table->boolean('status');
-            $table->timestamps();
+            $table->string('python_folder')->nullable();
             $table->softDeletes();
+            $table->timestamps();
+
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -36,6 +34,6 @@ class CreateAbsentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('absent');
+        Schema::dropIfExists('face_datasets');
     }
 }

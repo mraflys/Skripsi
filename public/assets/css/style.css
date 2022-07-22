@@ -43194,3 +43194,27 @@ select[readonly].select2-hidden-accessible+.select2-container {
     border: 1px dotted #000000;
     padding: 8px;
 }
+
+.face-transparan{
+    width: 200px;
+    height: 200px;
+    margin-top: -370px;
+    
+}
+@media only screen and (max-width : 750px) {
+    .face-transparan{
+        width: 150px;
+        height: 150px;
+        margin-top: -220px;
+        margin-left: 35px;
+    }
+}
+
+@media only screen and (max-width : 900px) {
+    .face-transparan{
+        width: 150px;
+        height: 150px;
+        margin-top: -225px;
+        margin-left: 25px;
+    }
+}

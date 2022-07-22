@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -48,6 +49,7 @@
     <script src="/assets/js/plugins/bootstrap.min.js"></script>
     <script src="/assets/js/pcoded.min.js"></script>
     <script src="/assets/js/ajax.js"></script>
+    <script src="/assets/js/webcam.js"></script>
     <script src="/assets/js/qrcode.js"></script>
     <script src="/assets/js/plugins/jquery.blockUI.js"></script>
     <script src="/assets/js/plugins/jquery.dataTables.min.js"></script>

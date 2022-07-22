@@ -26,40 +26,45 @@ class TransactionController extends Controller
         if ($validator->fails()) {
             return \Response::json(['success' => false, 'errors' => $validator->getMessageBag()->toArray()], 200);
         }
-        //move file
-        $path = public_path('storage/' . date("n"));
+        DB::beginTransaction();
+        try {
+            //move file
+            $path = public_path('storage/' . date("n"));
 
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            $file = $request->file('file');
+
+            $name = rand(100000, 999999) . '_' . trim($file->getClientOriginalName());
+
+            $file->move($path, $name);
+
+            $fullPath = 'storage/' . date("n") . '/' . $name;
+
+            //get transactions count in a day
+            $trCount = Transaction::whereDate('created_at', date("Y-m-d"))->count();
+            $trCount = $trCount + 1;
+
+            $trCount = str_pad($trCount, 4, "0", STR_PAD_LEFT);
+            $idTransactions = $request->code_area . date("dmY") . $trCount;
+
+            Transaction::Create([
+                'id_transactions' => $idTransactions,
+                'city' => $request->city,
+                'area' => $request->area,
+                'code_area' => $request->code_area,
+                'nominal' => $request->nominal,
+                'description' => $request->description,
+                'request_By' => $request->request_By,
+                'url_path' => $fullPath,
+                'file_name' => \File::name(public_path($fullPath)),
+                'file_mime' => \File::mimeType(public_path($fullPath)),
+            ]);
+        }catch (\Exception $e) {
+            DB::rollback();
         }
-
-        $file = $request->file('file');
-
-        $name = rand(100000, 999999) . '_' . trim($file->getClientOriginalName());
-
-        $file->move($path, $name);
-
-        $fullPath = 'storage/' . date("n") . '/' . $name;
-
-        //get transactions count in a day
-        $trCount = Transaction::whereDate('created_at', date("Y-m-d"))->count();
-        $trCount = $trCount + 1;
-
-        $trCount = str_pad($trCount, 4, "0", STR_PAD_LEFT);
-        $idTransactions = $request->code_area . date("dmY") . $trCount;
-
-        Transaction::Create([
-            'id_transactions' => $idTransactions,
-            'city' => $request->city,
-            'area' => $request->area,
-            'code_area' => $request->code_area,
-            'nominal' => $request->nominal,
-            'description' => $request->description,
-            'request_By' => $request->request_By,
-            'url_path' => $fullPath,
-            'file_name' => \File::name(public_path($fullPath)),
-            'file_mime' => \File::mimeType(public_path($fullPath)),
-        ]);
 
 
 
