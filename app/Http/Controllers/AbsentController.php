@@ -118,7 +118,6 @@ class AbsentController extends Controller
         $response = Http::attach(
             'absent', file_get_contents(\Storage::disk('public')->path('').$file, True), $fileName
         )->post('http://127.0.0.1:5000/api/eigenface');
-
         if($response['message'] == 'Success'){
             $indexname = str_replace("/","",$response['indexname']);
             $FaceDataset = FaceDataset::where('python_folder', 'like', '%'.$indexname.'%')->first();
@@ -165,41 +164,31 @@ class AbsentController extends Controller
 
     public function history_absent(Request $request)
     {
-        $Absent = Absent::with('user');
-        if(Auth::user()->role == 'administrator'){
-            $Absent = $Absent->get();
-        }else{
-            $Absent = $Absent->where('id_user', Auth::user()->id)->where('status', true)->get();
+        $Absents = Absent::with('user')->orderBy('created_at','desc')->get();
+        foreach($Absents as $Absent){
+            $Absent->tanggal = Carbon::parse($Absent->created_at)->format("d-m-Y");
+            $Absent->jam = Carbon::parse($Absent->created_at)->format("H:s");
+            if($Absent->status == 1){
+                $Absent->status = 'Berhasil';
+            }else{
+                $Absent->status = 'Tidak Berhasil';
+            }
+            $Absent->url = route('absent.detail-absent', [$Absent->id]);
+            $Absent->name = $Absent->user->name;
         }
+        return $Absents;
         
-        return Datatables::of($Absent)
-            ->editColumn('user.name', function($data) {
+    }
 
-                return $data->user->name;
-            })
-            ->editColumn('status', function($data) {
-                if($data->status == true){
-                    $status = 'Berhasil';
-                }else{
-                    $status = 'Tidak Berhasil';
-                }
-                return $status;
-            })
-            ->editColumn('created_at', function($data) {
-                return Carbon::parse($data->created_at)->format("d-m-Y H:s");
-            })
-            ->addColumn('action', function ($data) {
-                $action = "<a href='". route('absent.detail-absent', [$data->id]) ."' class='btn btn-outline-secondary text-secondary' title='Aprove'><i class='feather icon-eye'></i> Detail</a>";
-                return $action;
-            })->make(true);
+    public function history_absent_excel(Request $request)
+    {
+        return \Excel::download(new \App\Exports\UserAbsent(), 'Laporan Absen Semua Karyawan.xlsx');
         
     }
 
     public function history_absent_period(Request $request)
     {
         $Absent = User::with('absent')->get();
-        dd($Absent);
-
         
         return Datatables::of($Absent)
             ->editColumn('user.name', function($data) {
@@ -234,5 +223,54 @@ class AbsentController extends Controller
         Mapper::map($lat,$lng, ['zoom' => 15,'center' => true, 'markers' => ['title' => 'My Location', 'animation' => 'DROP']]);
 
         return view('absent.absent-detail', compact('Absent'));
+    }
+
+    public function periode(Request $request)
+    {
+        $Absents = Absent::select(Absent::raw('DATE(created_at) as date'), Absent::raw('count(*) as periode'))->groupBy('date')->get();
+        $periode = [];
+        $newCompete = ["Tanggal", "Periode", ["role" => "style"]];
+        array_push($periode, $newCompete);
+
+        foreach($Absents as $Absent){
+            $push = [$Absent->date, $Absent->periode, "#4D91DA"];
+            array_push($periode, $push);
+        }
+        return \Response::json(['success' => true, 'message' => 'reload', 'data' => $periode], 200);
+    }
+
+    public function periode_table(Request $request)
+    {
+        if(Auth::user()->role == 'administrator'){
+            $Absents = Absent::select(Absent::raw('DATE(created_at) as date'), Absent::raw('count(*) as periode'))->groupBy('date')->get();
+            foreach($Absents as $Absent){
+                $Absent->date = Carbon::parse($Absent->date)->format("d-m-Y");
+            }
+            return $Absents;
+        }else{
+            $Absents = Absent::where('id_user',Auth::user()->id)->with('user')->get();
+            foreach($Absents as $Absent){
+                $Absent->tanggal = Carbon::parse($Absent->created_at)->format("d-m-Y");
+                $Absent->jam = Carbon::parse($Absent->created_at)->format("H:s");
+                if($Absent->status == 1){
+                    $Absent->status = 'Berhasil';
+                }else{
+                    $Absent->status = 'Tidak Berhasil';
+                }
+                $Absent->url = route('absent.detail-absent', [$Absent->id]);
+                $Absent->name = $Absent->user->name;
+            }
+            return $Absents;
+        }
+        
+    }
+
+    public function periode_excel(Request $request)
+    {
+        if(Auth::user()->role == 'administrator'){
+            return \Excel::download(new \App\Exports\PeriodeAbsen(), 'Laporan Periode Absen User Lapangan.xlsx');
+        }else{
+            return \Excel::download(new \App\Exports\PeriodeAbsen(), 'Laporan Absensi Karyawan.xlsx');
+        }
     }
 }

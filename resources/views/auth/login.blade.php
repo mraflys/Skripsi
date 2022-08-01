@@ -1,95 +1,68 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/styleEmil.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-regis">
+        <div class="logo-login-regis">
+            <h1>JKI</h1>
+        </div>
+        <div class="form-login-regis">
+            <h1>Login</h1>
+            @if (!is_null(session('message_error')))
+                <p class="message-status-login" style="color: red">{{ session('message_error') }}</p>
+            @endif
+            @if (session('message_success'))
+                <div class="alert alert-success alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <h6>{{ session('message_success') }}</h6>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                @if (!is_null(session('message_error')))
-                    <div class="alert alert-danger alert-dismissible">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <h6>{{ session('message_error') }}</h6>
-                    </div>
-                @endif
-                @if (session('message_success'))
-                    <div class="alert alert-success alert-dismissible">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <h6>{{ session('message_success') }}</h6>
-
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <div class="card-header">{{ __('Login') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="username" type="username" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
-
-                                @error('username')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
                 </div>
+            @endif
+            @if (session('logout_msg'))
+                <p class="message-status-login">Logout Berhasil</p>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <p class="message-status-login" style="color: red">{{ $error }}</p> <br>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="group-form">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Type Correctly" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
+                    @error('username')
+                        <span class="invalid-feedback" style="color: red" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <div class="group-form">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Type Correctly" required autocomplete="current-password">
+                    @error('password')
+                        <span class="invalid-feedback" style="color: red" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                <button class="submit-next-button">Submit</button>
+            </form>
+            <div class="information">
+                <p>Apakah anda baru? tidak memiliki akun?</p>
+                <a href="{{ route('register') }}">Daftar disini</a>
             </div>
         </div>
     </div>
-</div>
-@endsection
+</body>
+</html>

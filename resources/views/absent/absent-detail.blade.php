@@ -5,55 +5,57 @@
 </style>
 @endsection
 @section('content')
-    <div class="container" >
-
-        <div class="card" style="overflow-x : scroll">
-            <div class="card-header">
-                <h3>Absent</h3>
-            </div>
-            
-            <div class="card-body m-3 w-100">
-                <input hidden name="latitude" id="latitude" value="{{$Absent->latitude}}">
-                <input hidden name="longitude" id="longitude" value="{{$Absent->longitude}}">
-                <div class="d-flex flex-row bd-highlight mb-3 w-100 container">
-                    <div class="m-3">
-                        <h4>Foto Absent</h4>
-                        <div class="w-100">
-
-                            <img src="{{asset('storage/'.$Absent->url_img)}}" style="width: 526px; height: 311px;">
-
-                        </div>
-                    </div>
-                    <div class="m-3">
-                        <h4>Detail</h4>
-                        <div class="mb-3" style="width: 600px">
-                            <label for="" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="name" disabled value="{{$Absent->user->name}}">
-                        </div>
-                        <div class="mb-3" style="width: 600px">
-                            <label for="" class="form-label">Waktu Absen</label>
-                            <input type="text" class="form-control" id="name" disabled value="{{$Absent->created_at}}">
-                        </div>
-                        <div class="mb-3" style="width: 600px">
-                            <label for="" class="form-label">Status</label>
-                            <input type="text" class="form-control" id="name" disabled 
-                            @if($Absent->status == true)
-                                value="Berhasil"
-                            @else
-                                value="Tidak Berhasil"
-                            @endif>
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Location</label>
-                            <div style="width: 100%; height: 500px;">
-                                {!! Mapper::render() !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <h1>Absent, Tanggal {{Carbon\Carbon::parse($Absent->created_at)->format("d-M-Y")}}</h1>
+    <input hidden name="latitude" id="latitude" value="{{$Absent->latitude}}">
+    <input hidden name="longitude" id="longitude" value="{{$Absent->longitude}}">
+    <div class="detail-absen">
+        <div class="image-absen"><img src="{{asset('storage/'.$Absent->url_img)}}" style="width: 100%; height: 100%;object-fit: cover;"></div>
+        <div class="location-absen">
+            {!! Mapper::render() !!}
         </div>
-        
+    </div>
+    <h3>Detail</h3>
+    <div class="tables-main">
+        <table>
+            <thead>
+                <tr class="head">
+                    <th>
+                        <div>Nama</div>
+                    </th>
+                    <th>
+                        <div>Tanggal</div>
+                    </th>
+                    <th>
+                        <div>Jam</div>
+                    </th>
+                    <th>
+                        <div>Status</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="list">
+                    <td>
+                        <div>{{$Absent->user->name}}</div>
+                    </td>
+                    <td>
+                        <div>{{Carbon\Carbon::parse($Absent->created_at)->format("d-M-Y")}}</div>
+                    </td>
+                    <td>
+                        <div>{{Carbon\Carbon::parse($Absent->created_at)->format("H:s")}}</div>
+                    </td>
+                    @if($Absent->status == true)
+                        <td>
+                            <div>Berhasil</div>
+                        </td>
+                    @else
+                        <td>
+                            <div>Tidak Berhasil</div>
+                        </td>
+                    @endif>
+                </tr>
+            </tbody>
+        </table>
     </div>
 @endsection
 

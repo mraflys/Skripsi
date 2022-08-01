@@ -21,16 +21,26 @@ class UserController extends Controller
     public function datatable(Request $request)
     {
         $datas = User::get();
-        return Datatables::of($datas)
-            ->addColumn('action', function ($data) {
-                $action = '';
-                if($data->is_active == 0){
-                    $action .= "<a href='". route('user-active',['id' => $data->id]) ."' class='btn btn-outline-success text-success' title='Aprove'><i class='feather icon-check-square'></i> Aktivkan User</a>";
-                }else{
-                    $action .= "<a href='". route('user-unactive',['id' => $data->id]) ."' class='btn btn-outline-danger text-danger' title='Reject'><i class='feather icon-x-square'></i> Matikan User</a>";
-                }
-                return $action;
-            })->make(true);
+        foreach($datas as $data){
+            $action = '';
+            if($data->is_active == 0){
+                $action .= "<a href='". route('user-active',['id' => $data->id]) ."' class='retake-button' title='Aprove'><i class='las la-check-circle'></i> Aktivkan User</a>";
+            }else{
+                $action .= "<a href='". route('user-unactive',['id' => $data->id]) ."' class='reject-button' title='Reject'><i class='las la-times-circle'></i> Matikan User</a>";
+            }
+            $data->action = $action;
+        }
+        return $datas;
+        // return Datatables::of($datas)
+        //     ->addColumn('action', function ($data) {
+        //         $action = '';
+        //         if($data->is_active == 0){
+        //             $action .= "<a href='". route('user-active',['id' => $data->id]) ."' class='btn btn-outline-success text-success' title='Aprove'><i class='feather icon-check-square'></i> Aktivkan User</a>";
+        //         }else{
+        //             $action .= "<a href='". route('user-unactive',['id' => $data->id]) ."' class='btn btn-outline-danger text-danger' title='Reject'><i class='feather icon-x-square'></i> Matikan User</a>";
+        //         }
+        //         return $action;
+        //     })->make(true);
     }
 
     public function active(Request $request)
@@ -47,5 +57,9 @@ class UserController extends Controller
         $user->is_active = false;
         $user->save();
         return redirect()->back()->with('message_success', 'Berhasil Menonaktivkan User');
+    }
+    public function user_excel(Request $request)
+    {
+        return \Excel::download(new \App\Exports\UserList(), 'Laporan User.xlsx');
     }
 }

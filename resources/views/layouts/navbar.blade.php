@@ -1,58 +1,21 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('home') }}">
-            JKI
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                @guest
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    </li>
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                            href="{{ route('transactions.index') }}">Transactions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page"
-                            href="{{ route('absent-face') }}">Absent</a>
-                    </li>
-                    @if(Auth::user()->role == 'administrator')
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page"
-                                href="{{ route('user.list') }}">User</a>
-                        </li>
-                    @endif
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">Log Out</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    </nav>
+<div class="sidebar">
+    <label for="menu-side" class="sidebar-menu">
+        <input type="checkbox" name="" id="menu-side">
+        <i class="las la-bars"></i>
+    </label>
+    <ul class="navigasi">
+        <li class="menu @if(Route::currentRouteName()=='home') active @endif"><a href="{{ route('home') }}"><i class="las la-home"></i><span>Home</span></a></li>
+        {{-- <li class="menu"><a href=""><i class="las la-clipboard-list"></i><span>Transaksi</span></a></li> --}}
+        @if(Auth::user()->role == 'administrator')
+            <li class="menu @if(Route::currentRouteName()=='user.list') active @endif"><a href="{{ route('user.list') }}"><i class="las la-user"></i><span>User</span></a></li>
+            <li class="menu @if(Route::currentRouteName()=='absent-face') active @endif"><a href="{{ route('absent-face') }}"><i class="la-clipboard-list"></i><span>Laporan Absent</span></a></li>
+        @endif
+        <li class="menu logout"><a href="{{ route('logout') }}"onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();"><i class="las la-door-open"></i><span>Logout</span></a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                class="d-none">
+                @csrf
+            </form>
+        </li>
+    </ul>
+</div>
