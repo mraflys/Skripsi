@@ -79,6 +79,7 @@
         let height = box.offsetHeight;
         let pluswid = 200;
         let plushei = 200;
+        let wid,hei;
         if(wid == null){
         wid = width;
         hei = height;
